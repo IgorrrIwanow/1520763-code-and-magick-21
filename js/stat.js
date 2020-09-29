@@ -23,8 +23,15 @@ let createText = function (ctx, color, font, text, x, y) {
   ctx.fillText(text, x, y);
 };
 
-let getMaxElement = function(arr) {
+let getMaxElement = function (arr) {
   let maxElement = arr[0];
+
+  for (let i = 1; i < arr.length; i++) {
+    if (arr[i] > maxElement) {
+      maxElement = arr[i];
+    }
+  }
+
   return maxElement;
 };
 
@@ -40,14 +47,16 @@ window.renderStatistics = function (ctx, players, times) {
       `#fff`
   );
 
+  let maxTime = getMaxElement(times);
+
   createText(ctx, `#000`, `16px PT Mono`, `Ура Вы победили!`, 120, 30);
   createText(ctx, `#000`, `16px PT Mono`, `Список результатов:`, 120, 50);
 
-  let barColors = [`hsla(0, 100%, 50%, 1)`, `hsla(240, 100%, 50%, 0.2)`, `hsla(240, 100%, 50%, 0.5)`, `hsla(240, 100%, 50%, 0.7)`]
+  let barColors = [`hsla(0, 100%, 50%, 1)`, `hsla(240, 100%, 50%, 0.2)`, `hsla(240, 100%, 50%, 0.5)`, `hsla(240, 100%, 50%, 0.7)`];
 
   for (let i = 0; i < players.length; i++) {
     createText(ctx, `#000`, `16px PT Mono`, players[i], CLOUD_X + BAR_GAP + (BAR_WIDTH + BAR_GAP) * i, CLOUD_Y + BAR_Y + BAR_HEIGHT);
     ctx.fillStyle = barColors[i];
-    ctx.fillRect(CLOUD_X + BAR_GAP + (BAR_WIDTH + BAR_GAP) * i, BAR_Y, BAR_WIDTH, BAR_HEIGHT);
+    ctx.fillRect(CLOUD_X + BAR_GAP + (BAR_WIDTH + BAR_GAP) * i, BAR_Y, BAR_WIDTH, (BAR_HEIGHT * times[i]) / maxTime);
   }
 };
